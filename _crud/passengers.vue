@@ -3,7 +3,7 @@
     <form-orders ref="formOrders" @refresh-data="getDataTable(true)" />
     <modalNonFlight
       ref="refModalNonFlight"
-      :refFormOrders="securityFormStore"
+      :refFormOrders="refFormOrders"
       @getWorkOrderFilter="getDataTable(true)"
     />
     <flightDetail />
@@ -31,8 +31,6 @@ import workOrderList from '../_store/actions/workOrderList.ts';
 import modalNonFlight from 'src/modules/qramp/_components/modalNonFlight/views/index.vue';
 import { cacheOffline } from 'src/plugins/utils';
 import { getWorkOrderAndOpenModal } from '../_store/actions/getWorkOrderAndOpenModal'
-import securityFormStore from "../_components/securityForm/store";
-import { ref } from 'vue';
 
 export default {
   name: 'RampCrud',
@@ -70,6 +68,7 @@ export default {
       await qRampStore().setIsPassenger(true);
       await qRampStore().setTypeWorkOrder(null);
       await workOrderList().getAllList(true);
+      qRampStore().setBusinessUnitId(BUSINESS_UNIT_PASSENGER);
       await workOrderList().getCustomerWithContract()
     })
   },
@@ -83,9 +82,6 @@ export default {
     qRampStore().setFlightId(null);
   },
   computed: {
-    securityFormStore() {
-      return ref(securityFormStore)
-    },
     isAppOffline() {
       return this.$store.state.qofflineMaster.isAppOffline;
     },

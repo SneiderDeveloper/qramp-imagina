@@ -30,7 +30,7 @@
                 />
             </div>
         </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6" v-if="isActualInAndActualOut">
         <collapseFly
           :title="$tr('isite.cms.label.inbound')"
           :flightNumber="form.inboundFlightNumber"
@@ -48,7 +48,7 @@
         </collapseFly>
       </div>
 
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6" v-if="isActualInAndActualOut">
         <div>
           <collapseFly :title="$tr('isite.cms.label.outbound')" :flightNumber="form.outboundFlightNumber"
                        :isComplete="validateBoundComplete('outboundRight')">
@@ -68,6 +68,7 @@
       </div>
       <div
         class="col-12"
+        v-if="isActualInAndActualOut"
       >
         <div class="tw-font-semibold
           lg:tw-grid

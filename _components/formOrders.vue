@@ -357,6 +357,8 @@ export default {
           if(isNonFlight && this.modalProps.update) this.modalProps.chip = { ...chip }
         }
 
+        console.log('this.modalProps', this.modalProps)
+
         this.flight = {}
         this.remark = {}
         this.signature = {}

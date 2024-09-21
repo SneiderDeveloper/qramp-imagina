@@ -67,6 +67,7 @@ export default {
     this.$nextTick(async () => {
       await qRampStore().setIsPassenger(true);
       qRampStore().setTypeWorkOrder(FUELING);
+      qRampStore().setBusinessUnitId(BUSINESS_UNIT_FUELING);
       await workOrderList().getAllList();
       await workOrderList().getCustomerWithContract()
     })

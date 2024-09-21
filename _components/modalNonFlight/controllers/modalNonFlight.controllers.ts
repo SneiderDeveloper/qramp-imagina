@@ -64,6 +64,7 @@ export default function controller(props: any, emit: any) {
   }
 
   const showModalFull = async (workOrder, customProps?) => {
+    console.log('refFormOrders.value', { workOrder })
     openModalFull(refFormOrders.value, workOrder, customProps)
     isOpenTableModal.value = false;
     showModal.value = false;

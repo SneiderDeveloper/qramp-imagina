@@ -25,7 +25,7 @@ export const LABOR = 4;
 export const FUELING = 3;
 export const SECURITY = 5;
 export const OPERATION_TYPE_OTHER = 6;
-export const OPERATION_TYPE_NON_FLIGHT = 13;
+export const OPERATION_TYPE_NON_FLIGHT = [13, 6];
 export const ADDITIONAL_FLIGHT_SERVICES = [STATUS_POSTED, STATUS_POSTING];
 export const DEFAULT_STATION_ID = 28;
 

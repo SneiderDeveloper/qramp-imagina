@@ -7,6 +7,7 @@ import storeFlight from '../../flight/store'
 import serviceListStore from '../../serviceList/store/serviceList'
 import { store, i18n, alert } from 'src/plugins/utils';
 import { updateFavoriteServicesList } from '../../serviceList/actions/updateFavoriteServicesList';
+import { NON_FLIGHT } from '../../model/constants';
 
 export default function flightController() {
   const refFlight: any = ref(null);
@@ -337,6 +338,13 @@ export default function flightController() {
       },
     }
   })
+  
+  const isActualInAndActualOut = computed(() => {
+    const isNonFlight = Number(qRampStore().getTypeWorkOrder()) === NON_FLIGHT
+    const isParentId = Boolean(storeFueling.form.parentId)
+    const showActualInAndActualOut = isNonFlight ? isParentId : true
+    return showActualInAndActualOut
+  })
 
   const reFilterFavorites = async (key: string, value) => {
     storeFueling.loading = true;
@@ -366,7 +374,6 @@ export default function flightController() {
       ...form.value,
       ...selectedData
     }
-    console.log(form.value)
   }
   async function searchFlightaware(field) {
     if(!['inboundFlightNumber', 'outboundFlightNumber'].includes(field) ) return;
@@ -438,5 +445,6 @@ export default function flightController() {
     loadingBound,
     validateBoundComplete,
     differenceHour,
+    isActualInAndActualOut
   }
 }

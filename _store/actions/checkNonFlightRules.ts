@@ -3,6 +3,7 @@ import moment from 'moment-timezone'
 import qRampStore from '../qRampStore'
 
 export const checkNonFlightRules = (flight) => {
+  return false
     if (!flight) return
 
     const DATE_FORMAT = 'YYYY-MM-DD'

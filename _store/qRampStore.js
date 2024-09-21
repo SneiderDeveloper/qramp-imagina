@@ -48,6 +48,7 @@ const state = reactive({
     isNonFlight: false,
     billingDate: null,
     clonedWorkOrder: null,
+    businessUnitId: null,
 });
 
 export default function qRampStore() {
@@ -77,6 +78,8 @@ export default function qRampStore() {
 
     function getIsPassenger() {
         return state.isPassenger;
+
+        
     }
 
     function getTitleOffline() {
@@ -508,17 +511,13 @@ export default function qRampStore() {
             console.log(error)
         }
     }
-
+   
+    
     function getBusinessUnitId() {
-        const isPassenger = getIsPassenger();
-        let businessUnitId = isPassenger ? BUSINESS_UNIT_PASSENGER : null;
-        if(isPassenger &&  getTypeWorkOrder() === LABOR) {
-            businessUnitId = BUSINESS_UNIT_LABOR
-        }
-        if(!isPassenger && getTypeWorkOrder() === SECURITY) {
-            businessUnitId = BUSINESS_UNIT_SECURITY
-        }
-        return businessUnitId
+        return state.businessUnitId
+    }
+    function setBusinessUnitId(value) {
+        state.businessUnitId = value
     }
     function getFilterCompany() {
         const isPassenger = getIsPassenger();
@@ -678,6 +677,7 @@ export default function qRampStore() {
         getTypeWorkOrder,
         setTypeWorkOrder,
         getBusinessUnitId,
+        setBusinessUnitId,
         getBillingDate,
         setBillingDate,
         getClonedWorkOrder,

@@ -1,5 +1,10 @@
 import {computed, reactive} from "vue";
-import { NON_FLIGHT, OPERATION_TYPE_NON_FLIGHT } from "../../model/constants";
+import { 
+  NON_FLIGHT, 
+  OPERATION_TYPE_NON_FLIGHT,
+  BUSINESS_UNIT_PASSENGER,
+  BUSINESS_UNIT_SECURITY 
+} from "../../model/constants";
 import qRampStore from 'src/modules/qramp/_store/qRampStore'
 import { mergeColumnDateWithCurrentTime } from '../actions/mergeColumnDateWithCurrentTime'
 import { Form, Store } from '../contracts'
@@ -17,12 +22,18 @@ const state = reactive<Store>({
     stationId: null,
     scheduleDate: null,
     responsibleId: null,
-    operationTypeId: OPERATION_TYPE_NON_FLIGHT,
+    operationTypeId: null,
     preFlightNumber: null,
   },
   seletedDateColumn: null,
   stationId: null,
 })
+
+const getOperationTypeId = () => {
+  const businessUnitId = qRampStore().getBusinessUnitId()
+  if (businessUnitId === BUSINESS_UNIT_PASSENGER) return OPERATION_TYPE_NON_FLIGHT[0]
+  if (businessUnitId === BUSINESS_UNIT_SECURITY) return OPERATION_TYPE_NON_FLIGHT[1]
+}
 
 export default computed(() => ({
   get selectedTab() {
@@ -86,6 +97,7 @@ export default computed(() => ({
       ...state.form,  
       businessUnitId,
       type: NON_FLIGHT,
+      operationTypeId: getOperationTypeId(),
       titleOffline: 'New non-flight',
     };
   },
@@ -101,7 +113,7 @@ export default computed(() => ({
       stationId: null,
       scheduleDate: null,
       responsibleId: null,
-      operationTypeId: OPERATION_TYPE_NON_FLIGHT,
+      operationTypeId: null,
       preFlightNumber: null,
     } 
     state.seletedDateColumn = null

@@ -8,13 +8,25 @@ import {
 } from 'vue';
 import storeFueling from '../store/index';
 import qRampStore from 'src/modules/qramp/_store/qRampStore';
-import { STATUS_CLOSED, STATUS_DRAFT, STATUS_POSTED, STATUS_SCHEDULE, STATUS_SUBMITTED, STEP_FLIGHT, STEP_SERVICE } from '../../model/constants';
+import { 
+  STATUS_CLOSED, 
+  STATUS_DRAFT, 
+  STATUS_POSTED, 
+  STATUS_SCHEDULE, 
+  STATUS_SUBMITTED, 
+  STEP_FLIGHT, 
+  STEP_SERVICE,
+  modalFullProps,
+} from '../../model/constants';
 import updateWorkOrders from '../services/updateWorkOrders';
 import stepps from '../models/defaultModels/stepps'
 import serviceListStore from '../../serviceList/store/serviceList';
 import baseService from "src/modules/qcrud/_services/baseService.js";
 import { alert, store, i18n } from 'src/plugins/utils';
 import { useQuasar } from 'quasar';
+import workOrderList from '../../../_store/actions/workOrderList';
+import { constructionWorkOrder } from 'src/modules/qramp/_store/actions/constructionWorkOrder';
+import getWorkOrder from 'src/modules/qramp/_components/scheduleKanban/actions/showWorkOrders';
 
 export default function modalFormController(props: any = null, emit: any = null) {
   const $q = useQuasar();
@@ -44,6 +56,9 @@ export default function modalFormController(props: any = null, emit: any = null)
   ])
   const actions = computed(() => {
     const statusId = storeFueling.form.statusId;
+    const parentId = storeFueling.form.parentId;
+    const showOpenSourceWorkOrder = Boolean(parentId);
+    const flight = qRampStore().getClonedWorkOrder();
     const actionsUpdate = [
       {
         props: {
@@ -59,6 +74,29 @@ export default function modalFormController(props: any = null, emit: any = null)
           storeFueling.reset();
           await emit('refresh-data');
           storeFueling.loading = false;
+        }
+      },
+      {
+        props: {
+          vIf: !showOpenSourceWorkOrder && Boolean(flight),
+          class: 'btn-action-form-orders',
+          label: $q.screen.lt.sm ? null : 'Return to cloned work order',
+          icon: 'fa-regular fa-arrow-left',
+        },
+        action: async() => {
+          loadChildData();
+        }
+      },
+      {
+        props: {
+          icon: 'fa-brands fa-sourcetree',
+          class: 'btn-action-form-orders',
+          label: $q.screen.lt.sm ? null : 'Open source work order',
+          vIf: showOpenSourceWorkOrder,
+          loading: storeFueling.loading,
+        },
+        action: async () => {
+          await loadParentData();
         }
       },
       {
@@ -194,6 +232,61 @@ export default function modalFormController(props: any = null, emit: any = null)
   async function getDataTable() {
     await emit('refresh-data')
   }
+  function loadform({ data, modalProps }) {
+    console.log('loadform', { data, modalProps })
+    const { isClone, title, update, width } = modalProps
+    // if (!data.id) return;
+    storeFueling.showModal = true;
+    storeFueling.loading = true;
+    storeFueling.isUpdate = update;
+    storeFueling.titleModal = title;
+    // storeFueling.lastTitle = lastTitle;
+    storeFueling.widthModal = width;
+    storeFueling.isClone = isClone;
+    storeFueling.form = data;
+    storeFueling.loading = false;
+  }
+  async function loadChildData() {
+    storeFueling.loading = true;
+    storeFueling.reset()
+    const flight = qRampStore().getClonedWorkOrder()
+    storeFueling.form = { ...flight }
+    await workOrderList().getFavourites()
+
+    const modalProps = {
+      ...modalFullProps,
+      // title: modalProps.lastTitle,
+      workOrderId: flight.id,
+      isClone: true
+    }
+
+    loadform({ data: flight, modalProps })
+  }
+  async function loadParentData() {
+    storeFueling.loading = true;
+    const data = storeFueling.form;
+    const formData = structuredClone(await constructionWorkOrder(data))
+    qRampStore().setClonedWorkOrder(formData)
+
+    storeFueling.reset()
+    const workOrder = await getWorkOrder(formData?.parentId)
+    workOrder.data.parentId = null
+    storeFueling.form = { ...workOrder.data }
+    await workOrderList().getFavourites()
+
+    const modalProps = {
+      // ...modalFullProps,
+      title: i18n.tr('ifly.cms.form.updateWorkOrder') + (workOrder.data.id ? ` Id: ${workOrder.data.id}` : ''),
+      lastTitle: this.modalProps.title,
+      workOrderId: workOrder.data.id,
+      chip: {
+        label: "Parent",
+      },
+      parent: true
+    }
+
+    loadform({ data: workOrder.data, modalProps })
+  }
   onMounted(async () => {
     storeFueling.emitEvent.refreshData = getDataTable();
   })
@@ -213,6 +306,7 @@ export default function modalFormController(props: any = null, emit: any = null)
     save,
     isUpdate,
     refStepper,
-    getDataTable
+    getDataTable,
+    loadform
   };
 }

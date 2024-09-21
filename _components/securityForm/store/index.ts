@@ -16,6 +16,7 @@ const state = reactive({
     updateModal: false,
     widthModal: '35vw',
     isUpdate: false,
+    isClone: false,
     dialogTable: false,
     dataTable: [],
     form: {
@@ -41,6 +42,7 @@ const state = reactive({
         inboundBlockIn: null,
         outboundBlockOut: null,
         faFlightId: null,
+        parentId: null,
     },
     emitEvent: {},
 })
@@ -69,6 +71,12 @@ const store = computed(() => ({
     },
     set isUpdate(value: boolean) {
         state.isUpdate = value;
+    },
+    get isClone(): boolean {
+        return state.isClone;
+    },
+    set isClone(value: boolean) {
+        state.isClone = value;
     },
     get titleModal(): string {
         return state.titleModal;
@@ -128,6 +136,7 @@ const store = computed(() => ({
         state.form.inboundBlockIn = qRampStore().dateFormatterFull(value.inboundBlockIn) || null;
         state.form.outboundBlockOut = qRampStore().dateFormatterFull(value.outboundBlockOut) || null;
         state.form.faFlightId = value.faFlightId || null;
+        state.form.parentId = value.parentId || null;
 
         qRampStore().setTypeWorkOrder(value.type)
         if(navigator.onLine) {
