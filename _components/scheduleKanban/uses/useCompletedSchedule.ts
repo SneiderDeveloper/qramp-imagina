@@ -46,7 +46,12 @@ export default function useCompletedSchedule(props: any, emit: any) {
   const completed = computed(() => props.column.completed)
   const uncompleted = computed(() => props.column.uncompleted)  
 
-  const createNonFlight = computed(() => !isBlank.value && !showInline.value && isPassenger.value && qRampStore().getTypeWorkOrder() !== LABOR)
+  const createNonFlight = computed(() => {
+    return  !isBlank.value && 
+            !showInline.value && 
+            isPassenger.value && 
+            qRampStore().getTypeWorkOrder() !== LABOR
+  })
 
   const createFlight = computed(() => {
     return !isBlank.value && !showInline.value

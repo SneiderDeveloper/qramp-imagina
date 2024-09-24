@@ -55,7 +55,7 @@ export default function flightController() {
   })
   const showFieldScheduleDate = computed(() => {
     const operationTypeId = Number(storeFueling.form.operationTypeId)
-    return qRampStore().getTypeWorkOrder() !== LABOR && operationTypeId === OPERATION_TYPE_NON_FLIGHT[1]
+    return qRampStore().getTypeWorkOrder() !== LABOR && OPERATION_TYPE_NON_FLIGHT.includes(operationTypeId)
   })
   const formFields = computed(() => {
     return {
@@ -373,7 +373,7 @@ export default function flightController() {
       },
     }
   })
-  
+
   const isActualInAndActualOut = computed(() => {
     const isNonFlight = Number(storeFueling.form.type) === NON_FLIGHT
     const isParentId = Boolean(storeFueling.form.parentId)

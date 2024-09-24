@@ -349,7 +349,7 @@ export default {
         ?  HalfTurnInBountPassengerModel : HalfTurnInBountModel;
         let halfTurnOutBount = this.isPassenger || flightForm.operationTypeId == OPERATION_TYPE_OTHER
         ? HalfTurnOutBountPassengerModel : HalfTurnOutBountModel;
-        if(this.isPassenger && flightForm.operationTypeId == OPERATION_TYPE_NON_FLIGHT) {
+        if(this.isPassenger && flightForm.operationTypeId == OPERATION_TYPE_NON_FLIGHT[0]) {
           halfTurnInBount = [];
           halfTurnOutBount = [];
           flightformField = flightformField.concat(['scheduleDate']);

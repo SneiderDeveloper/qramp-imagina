@@ -242,7 +242,7 @@ export default {
     },
     'form.operationTypeId'(newVal) {
       if(qRampStore().getTypeWorkOrder() !== LABOR) {
-        if(newVal == OPERATION_TYPE_NON_FLIGHT) {
+        if(OPERATION_TYPE_NON_FLIGHT.includes(Number(newVal))) {
           qRampStore().setTypeWorkOrder(NON_FLIGHT);
         } else {
           qRampStore().setTypeWorkOrder(FLIGHT);
@@ -274,8 +274,8 @@ export default {
     },
     operationTypeList() {
       const data = structuredClone(workOrderList().getOperationTypeList())
-      if (Number(this.form.operationTypeId) === OPERATION_TYPE_NON_FLIGHT) return data
-      if (this.isPassenger) return data.filter(item => item.id !== OPERATION_TYPE_NON_FLIGHT)
+      if (OPERATION_TYPE_NON_FLIGHT.includes(Number(this.form.operationTypeId))) return data
+      if (this.isPassenger) return data.filter(item => item.id !== OPERATION_TYPE_NON_FLIGHT[0])
       return data
     },
     disabledReadonly() {
@@ -404,13 +404,13 @@ export default {
     },
     readonlyOperationType() {
       const { parentId, preFlightNumber, operationTypeId } = this.dataCompoment || {};
-      const isOther = Number(operationTypeId) === OPERATION_TYPE_NON_FLIGHT
+      const isOther = Number(operationTypeId) === OPERATION_TYPE_NON_FLIGHT[0]
       const createdInNonFlight = (Boolean(parentId) || !Boolean(preFlightNumber)) && isOther;
       return this.readonly || this.disabledReadonly || createdInNonFlight;
     },
     showFieldScheduleDate() {
       const operationTypeId = Number(this.form.operationTypeId)
-      return this.isPassenger && qRampStore().getTypeWorkOrder() !== LABOR && operationTypeId === OPERATION_TYPE_NON_FLIGHT
+      return this.isPassenger && qRampStore().getTypeWorkOrder() !== LABOR && operationTypeId === OPERATION_TYPE_NON_FLIGHT[0]
     },
     isActualInAndActualOut() {
       const isNonFlight = Number(this.dataCompoment.type) === NON_FLIGHT
@@ -920,7 +920,7 @@ export default {
     },
     showFieldScheduleDate() {
       const operationTypeId = Number(this.form.operationTypeId)
-      return this.isPassenger && operationTypeId === OPERATION_TYPE_NON_FLIGHT
+      return this.isPassenger && operationTypeId === OPERATION_TYPE_NON_FLIGHT[0]
     },
     delayList: {
       get: () => cargoStore().getDelayList(),

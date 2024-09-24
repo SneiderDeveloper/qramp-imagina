@@ -28,8 +28,8 @@ export default async function saveSimpleWorkOrders(): Promise<WorkOrders> {
         if(qRampStore().getTypeWorkOrder() === LABOR) {
           type = LABOR
         }
-        if(form.operationTypeId == OPERATION_TYPE_NON_FLIGHT && qRampStore().getTypeWorkOrder() !== LABOR) {
-          type = form.operationTypeId == OPERATION_TYPE_NON_FLIGHT ? NON_FLIGHT : FLIGHT
+        if(OPERATION_TYPE_NON_FLIGHT.includes(Number(form.operationTypeId)) && qRampStore().getTypeWorkOrder() !== LABOR) {
+          type = OPERATION_TYPE_NON_FLIGHT.includes(Number(form.operationTypeId)) ? NON_FLIGHT : FLIGHT
         }
 
         try {

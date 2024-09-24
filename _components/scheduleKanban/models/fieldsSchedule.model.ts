@@ -55,8 +55,8 @@ export default function modelFields() {
 
     const operationTypeList =  computed(() => {
       const data = structuredClone(workOrderList().getOperationTypeList())
-      if (Number(form.value.operationTypeId) === OPERATION_TYPE_NON_FLIGHT) return data
-      if (isPassenger.value) return data.filter(item => item.id !== OPERATION_TYPE_NON_FLIGHT)
+      if (OPERATION_TYPE_NON_FLIGHT.includes(Number(form.value.operationTypeId))) return data
+      if (isPassenger.value) return data.filter(item => !OPERATION_TYPE_NON_FLIGHT.includes(Number(item.id)))
       return data
     });
     const fields: ComputedRef<any> = computed(() => ({
