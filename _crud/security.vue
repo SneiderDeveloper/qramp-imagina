@@ -1,7 +1,7 @@
 <template>
   <div>
-    <securityForm 
-      @refresh-data="getDataTable(true)" 
+    <securityForm
+      @refresh-data="getDataTable(true)"
       ref="modalCreate"
     />
     <flightDetail />
@@ -146,7 +146,15 @@ export default {
               label: this.$tr('isite.cms.form.id'),
               field: 'id',
               style: 'width: 50px',
-              action: (item) => false
+              action: (item) => {
+                securityFormStore.showModal = true;
+                securityFormStore.loading = true;
+                securityFormStore.isUpdate = true;
+                securityFormStore.titleModal = 'Update security' + (item.id ? ` Id: ${item.id}` : '')
+                securityFormStore.widthModal = '90vw';
+                qRampStore().setWorkOrderId(item.id);
+                this.showWorkOrder(item);
+              }
             },
             {
               name: 'customer',
@@ -428,6 +436,7 @@ export default {
                 securityFormStore.isUpdate = true;
                 securityFormStore.titleModal = 'Update security' + (item.id ? ` Id: ${item.id}` : '')
                 securityFormStore.widthModal = '90vw';
+                qRampStore().setWorkOrderId(item.id);
                 this.showWorkOrder(item);
               }
             },

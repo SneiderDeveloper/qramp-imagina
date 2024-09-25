@@ -4,20 +4,20 @@
         ref="refPageActions"
         :title="title"
         multipleRefresh
-        :extra-actions="extraPageActions"  
+        :extra-actions="extraPageActions"
         class="q-mb-md"
         @search="val => changeSearch(val)"
-        @refresh="buildKanbanStructure(true)" 
+        @refresh="buildKanbanStructure(true)"
       />
     <filters v-if="storeFilter.showModal"/>
-    <actionBar /> 
+    <actionBar />
   <div class="tw-flex">
     <div
       class="
-        tw-flex-none 
-        tw-py-4 
-        tw-border-b 
-        tw-border-gray-200 
+        tw-flex-none
+        tw-py-4
+        tw-border-b
+        tw-border-gray-200
         tw-space-y-4 tw-hidden"
     >
       <q-btn-toggle
@@ -39,11 +39,11 @@
     </div>
 
     <div
-      v-if="columns.length > 0" 
+      v-if="columns.length > 0"
       class="
-        tw-flex-1 
-        tw-h-auto 
-        tw-flex 
+        tw-flex-1
+        tw-h-auto
+        tw-flex
         tw-overflow-x-auto
       "
       >
@@ -53,17 +53,22 @@
         :column="column"
         :groupOptions="groupOptions"
         class="
-          tw-flex-none 
-          tw-space-y-0 
-          tw-h-auto 
-          tw-rounded-lg 
+          tw-flex-none
+          tw-space-y-0
+          tw-h-auto
+          tw-rounded-lg
           tw-mb-4
         "
       />
     </div>
   </div>
   <modalSchedule />
-  <formOrders ref="refFormOrders" @getWorkOrderFilter="individualRefreshByColumns" />
+  <formOrders
+    ref="refFormOrders"
+    v-if="!isSecurity"
+    @getWorkOrderFilter="individualRefreshByColumns"
+  />
+  <securityForm v-else ref="refFormOrders" @refresh-data="individualRefreshByColumns" />
   <modalNonFlight
     ref="refModalNonFlight"
     :refFormOrders="refFormOrders"
@@ -89,6 +94,8 @@ import modalStation from "./modalStation.vue";
 import selectFlightNumberModal from '../../modal/selectFlightNumber/index.vue'
 import flightDetail from '../../modal/flightDetail.vue';
 import modalNonFlight from 'src/modules/qramp/_components/modalNonFlight/views/index';
+import securityForm from '../../securityForm/components/index.vue';
+
 export default defineComponent({
   components: {
     kanbanColumn,
@@ -100,7 +107,8 @@ export default defineComponent({
     modalStation,
     selectFlightNumberModal,
     flightDetail,
-    modalNonFlight
+    modalNonFlight,
+    securityForm
   },
   setup(props) {
     return {...useKanbanBoard(props)}

@@ -555,8 +555,7 @@ export default function workOrderList(): WorkOrderList {
         }
         const response = await baseService.index('apiRoutes.qramp.workOrders', params, true);
         const data = response;
-        const workOrderIds = data.data.map(item => item.id);
-        const responseWorkItems = await getWorkOrderItems(workOrderIds);
+        const responseWorkItems = await getWorkOrderItems(params);
         setWorkOrdersItemsList(responseWorkItems?.data);
         setDataWorkOrderList(data);
         return data;
@@ -566,14 +565,14 @@ export default function workOrderList(): WorkOrderList {
     }
   }
 
-  const getWorkOrderItems = async (workOrderIds: number) => {
+  const getWorkOrderItems = async (paramsData) => {
     try {
       const params = {
         refresh: true,
         params: {
           include: 'workOrderItemAttributes',
           filter: {
-            workorderId: workOrderIds
+            ...paramsData.params.filter
           },
         }
       };

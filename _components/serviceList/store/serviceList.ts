@@ -95,11 +95,11 @@ export default function serviceListStore(): ServiceListStoreContract {
 
     function removeFromFavouriteList(id) {
         state.favouriteList = state.favouriteList.filter(item => item.productId !== id);
-    } 
+    }
 
     function pustFavouriteList(data) {
         state.favouriteList.push(data);
-    } 
+    }
 
     function setFavouriteList(value: any): void {
         state.favouriteList = value;
@@ -152,14 +152,14 @@ export default function serviceListStore(): ServiceListStoreContract {
         return await orderServicesWithTheStructureToSave(services, isType);
     }
 
-    
+
     function getAllServices(services: ServiceModelContract[]): ServiceModelContract[]  {
         const servicesData: any = [];
         services.forEach(obj => {
             const item: any = _.cloneDeep(obj);
             if (item.dynamicField) {
                 servicesData.push(item);
-            } 
+            }
             if (item.lists) {
                 item.lists.forEach(list => {
                     const listServicesData = getAllServices([list]);
@@ -219,7 +219,8 @@ export default function serviceListStore(): ServiceListStoreContract {
        let serviceList = await getServiceListSelected(true);
        serviceList = serviceList.filter(item => {
         if (item.product_type == 2 || item.product_type == 3) {
-            return item.work_order_item_attributes.some(attr => attr.value === null || attr.value === undefined);
+            return item.work_order_item_attributes.some(attr => attr.value === null ||
+              attr.value === undefined);
         }
         return false;
        })

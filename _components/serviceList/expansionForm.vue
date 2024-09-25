@@ -37,7 +37,7 @@ export default defineComponent({
         if(!permissionFavourite.value.create) return;
         const { stationId, contractId, customerId, carrierId, operationTypeId } = storeFlight().getForm();
         const response: any = await postFavourites({
-          productId: data.id, 
+          productId: data.id,
           stationId,
           contractId,
           customerId,
@@ -150,17 +150,17 @@ export default defineComponent({
                 </p>
               </div>
         </div>
-        <div 
+        <div
           class="
-            tw-w-3/5 
-            tw-mx-2 
+            tw-w-3/5
+            tw-mx-2
             tw-truncate
-            tw-flex 
-            tw-flex-wrap 
+            tw-flex
+            tw-flex-wrap
             tw-justify-end tw-gap-4"
           >
-          <div 
-            v-for="(field, keyfield) in item.formField" 
+          <div
+            v-for="(field, keyfield) in item.formField"
             :key="keyfield"
           >
             <div>

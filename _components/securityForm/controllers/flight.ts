@@ -19,7 +19,7 @@ export default function flightController() {
       storeFueling.form = value;
     }
   });
-  const differenceHour = computed(() => qRampStore().getDifferenceInHours(form.value.inboundBlockIn, form.value.outboundBlockOut))
+  const differenceHour = computed(() => qRampStore().getDifferenceInHours(form.value.inboundBlockIn, form.value.outboundBlockOut) || 0)
   const loadingBound = ref(false);
   const dialogTable = computed({
     get: () => storeFueling.dialogTable,
@@ -422,7 +422,7 @@ export default function flightController() {
       },
     }
   })
-  
+
   const isActualInAndActualOut = computed(() => {
     const isNonFlight = Number(storeFueling.form.type) === NON_FLIGHT
     const isParentId = Boolean(storeFueling.form.parentId)

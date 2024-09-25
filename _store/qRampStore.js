@@ -48,9 +48,16 @@ const state = reactive({
     billingDate: null,
     clonedWorkOrder: null,
     businessUnitId: null,
+    workOrderId: null,
 });
 
 export default function qRampStore() {
+    function setWorkOrderId(value) {
+      state.workOrderId = value;
+    }
+    function getWorkOrderId() {
+      return state.workOrderId;
+    }
     function setIsPassenger(value) {
         state.isPassenger = value;
     }
@@ -513,7 +520,7 @@ export default function qRampStore() {
         return state.businessUnitId
     }
     function setBusinessUnitId(value) {
-        state.businessUnitId = Number(value)
+        state.businessUnitId = value
     }
 
     function getOperationTypeIdNonFlight() {
@@ -690,6 +697,8 @@ export default function qRampStore() {
         getFilterCompany,
         dateFormatterFull,
         getFormTable,
-        checkIfDataArrives
+        checkIfDataArrives,
+        getWorkOrderId,
+        setWorkOrderId
     }
 }

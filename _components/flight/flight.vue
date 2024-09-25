@@ -143,7 +143,8 @@ import {
   OPERATION_TYPE_NON_FLIGHT,
   THIRTY_MINUTES,
   OPERATION_TYPE_TURN_PASSENGER,
-  FIFTEEN_MINUTES
+  FIFTEEN_MINUTES,
+  LABOR,
 } from '../model/constants.js'
 import workOrderList from '../../_store/actions/workOrderList.ts';
 import collapse from './collapse.vue'

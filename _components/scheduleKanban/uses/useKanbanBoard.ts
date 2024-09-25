@@ -51,7 +51,7 @@ export default function useKanbanBoard(props) {
       options: modelHoursFilter,
     },
   });
-
+  const isSecurity = computed(() => qRampStore().getBusinessUnitId() === BUSINESS_UNIT_SECURITY);
   const title = computed(() => isPassenger.value ? 'Passenger Schedule' : 'Ramp Schedule')
   const selectedDate = computed(() => storeFilter.selectedDate);
 
@@ -238,7 +238,7 @@ export default function useKanbanBoard(props) {
         storeFilter.showModalStation = true;
         return;
       }
-      
+
       if (!storeKanban.loading) {
         await init();
       }
@@ -273,6 +273,7 @@ export default function useKanbanBoard(props) {
     loadingMain,
     search,
     changeSearch,
-    refPageActions
+    refPageActions,
+    isSecurity
   };
 }

@@ -20,7 +20,7 @@ export const getCategories = async (company?: null | []): Promise<any[]> => {
     if (store.hasAccess('ramp.categories.index')) {
         try {
             const companyId = company ? company : qRampStore().getFilterCompany();
-            
+
             let requestParams = {
                 params: {
                     include:
@@ -72,7 +72,11 @@ export async function buildServiceList(): Promise<any[]> {
 
         const build = categoryList.filter(item => {
             const types = item.types || [];
-            return types.includes(String(qRampStore().getTypeWorkOrder()));
+            let businessUnitId = qRampStore().getBusinessUnitId();
+            if (businessUnitId === 'null') {
+              businessUnitId = null;
+            }
+            return item.businessUnitId == businessUnitId && types.includes(String(qRampStore().getTypeWorkOrder()));
         }).map(buildService);
         return build;
     } catch (error) {
@@ -93,7 +97,7 @@ export async function buildServiceList(): Promise<any[]> {
  */
 export const getIfItIsTypeListOrDynamicField = (product) => {
     try {
-        
+
         const products = product || [];
         const data: any = [];
         const dynamicFieldModel: any = {
@@ -131,26 +135,42 @@ function getDynamicField(product) {
         const productoType = product.type || null;
         const att = product.attributes || [];
         const optionAtt = product.options?.attributes || [];
+
         const result = {};
         const organizedData = optionAtt.length > 0 ? _.sortBy(att, item => optionAtt.indexOf(String(item.id))) : att;
         for (let i = 0; i < organizedData.length; i++) {
             const currentValue = organizedData[i];
+            const propsOptions = currentValue.options?.props || {}
+            const loadOptions = currentValue.options?.loadOptions ? {
+              loadOptions : {
+                ...currentValue.options?.loadOptions,
+                requestParams: {
+                  filter: {
+                    workOrderId: qRampStore().getWorkOrderId(),
+                  }
+                }
+              },
+            } : {};
             const props = setProps(
             currentValue.type,
             currentValue.name,
             currentValue.values,
             productoType,
-            i
+            i,
             );
             const key = `${currentValue.type}${currentValue.name ? currentValue.name : ""}`;
             const type = currentValue.type === "quantityFloat" ? "quantity" : currentValue.type;
-            const value = currentValue.value ? currentValue.type === 'checkbox' ? Number(currentValue.value) : currentValue.value : currentValue.type === 'checkbox' ? 0 : null
+            let value = currentValue.value ? currentValue.type === 'checkbox' ? Number(currentValue.value) : currentValue.value : currentValue.type === 'checkbox' ? 0 : null
+            if(propsOptions.multiple) {
+              value = value || [];
+            }
             result[key] = {
                 name: currentValue.name,
                 value,
                 type,
                 id: currentValue.id,
-                props: { ...props },
+                props: { ...props, ...propsOptions },
+                ...loadOptions
             };
         }
 
@@ -231,9 +251,14 @@ export function getListOfSelectedServices(data, isType = true) {
     try {
         const service = data.filter(item => {
             for (let key in item.formField) {
-                if (item.formField[key].value) {
-                    return true;
-                }
+              const value = item.formField[key].value;
+              if (Array.isArray(value) && value.length > 0) {
+                return true;
+              }
+
+              if (!Array.isArray(value) && value) {
+                return true;
+              }
             }
             return false;
         });
@@ -307,10 +332,12 @@ function setAttr(obj) {
  * }
  */
 function validationDataAttr(obj: any, key: any) {
-    const value = obj[key].type === 'quantity' 
-        ? !obj[key].value || obj[key].value == 0  ? null 
+    let value = obj[key].type === 'quantity'
+        ? !obj[key].value || obj[key].value == 0  ? null
         : Math.abs(obj[key].value) : obj[key].value;
-    
+    if(obj[key].type === 'select' && obj[key].props?.multiple) {
+      value = JSON.stringify(obj[key].value);
+    }
     let data: any = {
         name: obj[key].name,
         value,
