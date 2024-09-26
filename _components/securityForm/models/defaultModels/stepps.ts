@@ -3,6 +3,7 @@ import serviceList from '../../../serviceList/index.vue';
 import remarks from '../../../remarks/index.vue';
 import { ref, markRaw } from 'vue';
 import signature from '../../../signature/signature.vue'
+import { configEntity } from './entitiesConfig';
 
 export default ref([
     {
@@ -10,7 +11,7 @@ export default ref([
       title: 'Flight',
       icon: 'fa-regular fa-plane',
       step: 1,
-      component: markRaw(flight),
+      component: markRaw(configEntity.componentFlight),
       error: false,
       done: false,
     },
@@ -40,5 +41,6 @@ export default ref([
       component: markRaw(signature),
       error: false,
       done: false,
+      disable: true
     }
-  ]).value
+  ]).value.filter(step => !configEntity.stepsIgnore?.includes(step.step))
