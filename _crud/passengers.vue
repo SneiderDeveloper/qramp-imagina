@@ -8,6 +8,11 @@
     />
     <flightDetail />
     <inner-loading :visible="loadingBulk" />
+    <section class="tw-flex tw-gap-10 tw-mb-3.5">
+      <template v-for="(data, index) in dataTicker" :key="index">
+        <ticker :data="data"/>
+      </template>
+    </section>
     <crud :crud-data="import('./baseCrud.vue')" :custom-data="crudData" ref="crudComponent"
           :title="$route.meta.title" />
   </div>
@@ -31,6 +36,7 @@ import workOrderList from '../_store/actions/workOrderList.ts';
 import modalNonFlight from 'src/modules/qramp/_components/modalNonFlight/views/index.vue';
 import { cacheOffline } from 'src/plugins/utils';
 import { getWorkOrderAndOpenModal } from '../_store/actions/getWorkOrderAndOpenModal'
+import ticker from 'src/modules/qsite/_components/master/ticker'
 
 export default {
   name: 'RampCrud',
@@ -39,13 +45,64 @@ export default {
     formOrders,
     flightDetail,
     modalNonFlight,
+    ticker
   },
   data() {
     return {
       crudId: this.$uid(),
       areaId: null,
       loadingBulk: false,
-      refFormOrders: null
+      refFormOrders: null,
+      dataTicker: [
+        {
+          tickerBody: [{
+            tag: 'Revenue',
+            value: '<h1 class="tw-text-2xl">$45.20K</h1>',
+            footer: '<span class="tw-text-red-400 tw-font-bold tw-mr-1">-0.1%</span><span class="tw-text-gray-400">This mounth<span/>',
+          }],
+          icon: {
+            name: 'fa-solid fa-circle-arrow-down-right',
+            className: 'tw-text-red-400',
+          }
+        },
+        {
+          tickerBody: [{
+            tag: 'Flights',
+            value: '235',
+            footer: '<span class="tw-text-green-400 tw-font-bold tw-mr-1">+1%</span><span class="tw-text-gray-400">This mounth<span/>',
+          }],
+          icon: {
+            name: 'fa-solid fa-circle-arrow-up-right',
+            className: 'tw-text-green-400',
+          }
+        },
+        {
+          tickerBody: [
+            {
+              tag: 'Completed',
+              value: '<span class="tw-text-green-400">24</span>',
+              classBody: 'tw-text-center tw-items-center',
+              // footer: `
+              //   <div class="tw-bg-gray-100 tw-px-1.5 tw-rounded-2xl tw-w-min">
+              //     <span class="tw-text-green-400 tw-font-bold tw-mr-1 tw-text-center">+1%</span>
+              //   </div>
+              // `,
+              // footerMain: '<span class="tw-text-gray-400">This mounth<span/>',
+              // footer: '<span class="tw-text-red-400 tw-font-bold tw-mr-1">-0.1%</span><span class="tw-text-gray-400">This mounth<span/>',
+            },
+            {
+              tag: 'Incomplete',
+              value: '<span class="tw-text-orange-400">90</span>',
+              classBody: 'tw-text-center tw-items-center',
+              // footer: `
+              //   <div class="tw-bg-gray-100 tw-px-1.5 tw-rounded-2xl tw-w-min">
+              //     <span class="tw-text-green-400 tw-font-bold tw-mr-1 tw-text-center">+1%</span>
+              //   </div>
+              // `,
+            },
+          ]
+        }
+      ],
     }
   },
   provide() {
