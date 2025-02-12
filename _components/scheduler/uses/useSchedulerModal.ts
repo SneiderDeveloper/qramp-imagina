@@ -7,8 +7,9 @@ import {
 } from 'vue';
 import store from '../store/index.store';
 import modelActionsModal from '../models/modelActionsModal';
-import { SchedulerModalComposition } from '../contracts/useSchedulerModal.contract'
+import { SchedulerModalComposition, HelpText } from '../contracts/useSchedulerModal.contract'
 import { ModelActionsModalResult } from '../contracts/modelActionsModal.contract'
+import { help } from '../models/help'
 /**
  * Custom composition function for managing scheduler modal state and actions.
  * @returns {SchedulerModalComposition}
@@ -51,6 +52,8 @@ export default function useSchedulerModal(props: any = null, emit:any = null): S
         }
     });
 
+    const helpText: ComputedRef<HelpText> = computed(() => help().create.value);
+
     /**
      * Reset the scheduler modal state.
      * @function
@@ -68,6 +71,7 @@ export default function useSchedulerModal(props: any = null, emit:any = null): S
         refFormFields,
         clear,
         loading,
-        titleModal
+        titleModal,
+        helpText,
     };
 }

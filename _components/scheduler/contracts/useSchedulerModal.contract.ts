@@ -28,6 +28,11 @@ export interface ModalActions {
     [key: string]: Function; // Update this with actual action types
 }
 
+export interface HelpText {
+    title: string;
+    description: string;
+}
+
 /**
  * Interface for the main composition function.
  */
@@ -38,5 +43,6 @@ export interface SchedulerModalComposition {
     clear: () => void;
     loading: LoadingComputed;
     titleModal: TitleModalComputed;
+    helpText: ComputedRef<HelpText>;
 }
 

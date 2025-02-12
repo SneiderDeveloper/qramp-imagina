@@ -188,6 +188,11 @@ export default defineComponent({
         Service summary
       </q-tooltip>
     </q-btn>
+    <hr class="tw-h-5 tw-w-0.5 tw-mx-2 hr-bg-color" />
+    <help-text
+      class="tw-ml-1"
+      v-bind="helpText"
+    />
   </div>
 </template>
 

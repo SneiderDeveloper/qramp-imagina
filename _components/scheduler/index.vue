@@ -7,6 +7,7 @@
     :actions="actions"
     :loading="loading"
     @hide="clear"
+    :help="helpText"
   >
     <div class="tw-px-4">
       <formFields ref="refFormFields" />
