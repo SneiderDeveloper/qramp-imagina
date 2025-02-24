@@ -38,6 +38,7 @@ export default [
       pages.qramp.securityOperationType
     ]
   },
+  pages.qramp.adHocSchedule,
   {
     title: 'isite.cms.message.request',
     icon: 'fa-light fa-browser',

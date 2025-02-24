@@ -143,6 +143,19 @@ export default {
       refresh: true,
     }
   },
+  adHocSchedule: {
+    activated: true,
+    authenticated: false,
+    path: '/adhoc/schedule/index',
+    name: 'qramp.admin.kanbansSchedule',
+    page: () => import('modules/qramp/_components/adhocSchedule/index.vue'),
+    layout: () => import('layouts/master.vue'),
+    title: 'Adhoc Schedule',
+    icon: 'fa-thin fa-calendar-days',
+    subHeader: {
+      refresh: true,
+    }
+  },
   scheduler: {
     permission: 'ramp.schedulers.manage',
     activated: true,

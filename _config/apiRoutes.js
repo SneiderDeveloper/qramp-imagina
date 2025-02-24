@@ -48,5 +48,8 @@ export default {
   bulkReloadTransactions: `${urlBase}/work-orders/bulk-reload-transactions`,
   workOrderItems: `${urlBase}/work-order-items`,
   favourites: `${urlBase}/favourites`,
-  paxOperationTypes : `${urlBase}/pax-operation-types`
+  paxOperationTypes : `${urlBase}/pax-operation-types`,
+  adHocScheduleRules: `${urlBase}/adhoc-schedule-rules`,
+  schedulers: `${urlBase}/schedulers`,
+  adhocSchedules: `${urlBase}/adhoc-schedules`,
 }
